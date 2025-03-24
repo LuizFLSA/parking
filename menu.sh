@@ -6,7 +6,7 @@
 #####################################################################################
 ## ISCTE-IUL: Trabalho prático de Sistemas Operativos 2024/2025, Enunciado Versão 1
 ##
-## Aluno: Nº:       Nome:
+## Aluno: Nº: a000000     Nome: Luiz Silva
 ## Nome do Módulo: S4. Script: menu.sh
 ## Descrição/Explicação do Módulo:
 ##
@@ -17,25 +17,33 @@
 ## Atenção: Não é suposto que volte a fazer nenhuma das funcionalidades dos scripts anteriores. O propósito aqui é simplesmente termos uma forma centralizada de invocar os restantes scripts.
 ## S4.1. Apresentação:
 ## S4.1.1. O script apresenta (pode usar echo, cat ou outro, sem “limpar” o ecrã) um menu com as opções abaixo indicadas.
+gerir_input() {
+  so_error S4.2.1 "$1"
+  so_success S4.2.1 0
+  exit 0
+}
 
 while true; do
   echo "MENU:"
-  echo "1: Regista passagem – Entrada estacionamento"
-  echo "2: Regista passagem – Saída estacionamento"
+  echo "1: Regista passagem - Entrada estacionamento"
+  echo "2: Regista passagem - Saída estacionamento"
   echo "3: Manutenção"
   echo "4: Estatísticas"
   echo "0: Sair"
   read -p "Opção: " opcao
 
-  #S4.2.1
   if [[ ! "$opcao" =~ ^[0-4]$ ]]; then 
-    so_error S4.2.1 "$opcao"
-    continue
+    gerir_input "$opcao"
   fi 
 
   case $opcao in
+    0)
+      so_success S4.2.1 0
+      exit 0
+      ;;
     1)
       # S4.3
+      so_success S4.2.1 1 
       echo "Regista passagem de Entrada estacionamento:"
       read -p "Indique a matrícula da viatura: " matricula
       read -p "Indique o código do país de origem da viatura: " codPais
@@ -43,29 +51,37 @@ while true; do
       read -p "Indique o nome do condutor da viatura: " nome
 
       # Invocar o script de registo de passagem
-      ./regista_passagem.sh "entrada" "$matricula" "$codPais" "$catVeic" "$nome"
-      
+      ./regista_passagem.sh "$matricula" "$codPais" "$catVeic" "$nome"
       so_success S4.3
+      so_success S4.2.1 0
+      exit 0;
       ;;
     2)
        # S4.4 
+      so_success S4.2.1 2
       echo "Regista passagem de Saída estacionamento:"
       read -p "Indique a matrícula da viatura: " matricula
       read -p "Indique o código do país de origem da viatura: " codPais
 
       # Invocar o script de registo de passagem
-      ./regista_passagem.sh "saida" "$matricula" "$codPais"
       
+      fusao="${codPais}/${matricula}"
+      ./regista_passagem.sh "$fusao"
       so_success S4.4
+      so_success S4.2.1 0
+      exit 0;
       ;;
     3)
       # S4.5
+      so_success S4.2.1 3
       ./manutencao.sh
-
       so_success S4.5
+      so_success S4.2.1 0
+      exit 0
       ;; 
     4)
       # S4.6 
+      so_success S4.2.1 4
       echo "Estatísticas:"
       echo "1: matrículas e condutores cujas viaturas estão ainda estacionadas no parque"
       echo "2: top3 das matrículas das viaturas que passaram mais tempo estacionadas"
@@ -78,19 +94,21 @@ while true; do
       read -p "Indique quais as estatísticas a incluir, opções separadas por espaço: " estatisticas
 
       # Verificar se a opção 8 foi selecionada
-      if [[ " $estatisticas " =~ " 8 " ]]; then
+      if [[ -z "$estatisticas" ]]; then
+        so_error S4.6
+      elif [[ " $estatisticas " =~ " 8 " ]]; then
+        # Se tem opção 8, chamar script sem argumentos
         ./stats.sh
+        so_success S4.6
       else
+        # Chamar script com argumentos
         ./stats.sh $estatisticas
+        so_success S4.6
       fi
-      
-      so_success S4.6
-      ;;
-    0)
+      so_success S4.2.1 0
       exit 0
       ;;
   esac
-  echo ""
 done
 
 ## S4.2. Validações:

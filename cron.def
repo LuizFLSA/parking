@@ -1,14 +1,16 @@
 #####################################################################################
 ## ISCTE-IUL: Trabalho prático de Sistemas Operativos 2024/2025, Enunciado Versão 1
 ##
-## Aluno: Nº:       Nome:
+## Aluno: Nº: a000000    Nome: Luiz Silva
 ## Nome do Módulo: S2.3 cron.def
-## Descrição/Explicação do Módulo:
-##
+## Descrição/Explicação do Módulo: Configurar o sistema de modo a que o script "manutencao.sh"
+## seja executado todas as semanas de segunda a sexta (incluindo feriados), às 05h59 e às 13h01
 ##
 ## Explicação de quais os comandos a usar para configurar o seu sistema Linux
 ## usando este ficheiro:
-##
-##
+## 05h59: 59(minutos) 5(horas) *(todos os dias do mês) *(todos os meses) 1-5(segunda a sexta) cd (path) /.../.../... && ./manutencao.sh (executa o .sh)
+## 13h01: 1 13 * * 1-5 cd /.../.../... && ./manutencao.sh
 #####################################################################################
 
+59 5 * * 1-5 cd /home/a124575/parte-1 && ./manutencao.sh
+1 13 * * 1-5 cd /home/a124575/parte-1 && ./manutencao.sh
